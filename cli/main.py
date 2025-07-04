@@ -739,6 +739,16 @@ def extract_content_string(content):
     else:
         return str(content)
 
+
+def short_summary(text: str, max_sentences: int = 2) -> str:
+    """Return a short summary of the given text."""
+    import re
+
+    text = text.replace("\n", " ")
+    sentences = re.split(r"(?<=[.!?]) +", text)
+    summary = " ".join(sentences[:max_sentences]).strip()
+    return summary
+
 def run_analysis(llm_profile: Optional[str] = None):
     # First get all user selections
     selections = get_user_selections()
@@ -1096,6 +1106,15 @@ def run_analysis(llm_profile: Optional[str] = None):
         final_state = trace[-1]
         decision = graph.process_signal(final_state["final_trade_decision"])
 
+        # Create a concise trading signal and short summary
+        signal_message = f"Trading Signal: {decision}"
+        summary_text = short_summary(final_state["final_trade_decision"])
+
+        # Record the signal
+        message_buffer.add_message("Signal", signal_message)
+        if message_buffer.telegram_enabled and message_buffer.telegram_mode == "final":
+            send_telegram_message(signal_message)
+
         # Update all agent statuses to completed
         for agent in message_buffer.agent_status:
             message_buffer.update_agent_status(agent, "completed")
@@ -1107,7 +1126,10 @@ def run_analysis(llm_profile: Optional[str] = None):
         # Update final report sections
         for section in message_buffer.report_sections.keys():
             if section in final_state:
-                message_buffer.update_report_section(section, final_state[section])
+                content = final_state[section]
+                if section == "final_trade_decision":
+                    content = summary_text
+                message_buffer.update_report_section(section, content)
 
         # Display the complete final report
         display_complete_report(final_state)
