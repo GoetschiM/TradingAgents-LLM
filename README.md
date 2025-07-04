@@ -120,11 +120,20 @@ you to enable optional Telegram logging of the CLI output.
 ### Local LLM with Ollama
 
 The default configuration uses a local Ollama server with the `phi3:mini-q4_K_M`
-model. Install [Ollama](https://ollama.com/) separately and download the model:
+model. Install the [Ollama](https://ollama.com/) CLI and download the model:
 
 ```bash
+# On Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# On macOS
+brew install ollama
+
 ollama pull phi3:mini-q4_K_M
 ```
+
+See the [official installation guide](https://ollama.com/download) for other
+platforms.
 
 You can start the server manually with `ollama serve` or run the helper script
 below which downloads the model if necessary and launches the server:
