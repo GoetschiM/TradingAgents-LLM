@@ -48,7 +48,9 @@ def create_fundamentals_analyst(llm, toolkit):
         prompt = prompt.partial(ticker=ticker)
 
         bound_llm = llm.bind_tools(tools)
-        chain = prompt | (lambda messages, llm=bound_llm: llm.invoke(messages))
+        chain = prompt | (
+            lambda prompt_value, llm=bound_llm: llm.invoke(prompt_value.to_messages())
+        )
 
         result = chain.invoke(state["messages"])
 
