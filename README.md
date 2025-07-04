@@ -169,6 +169,9 @@ below which downloads the model if necessary and launches the server:
 bash scripts/start_phi3_ollama.sh
 ```
 
+The server output is written to `logs/ollama.log` and the script checks
+whether the service starts successfully.
+
 Leave this running in a separate terminal so the framework can connect to
 `http://localhost:11434/v1`.
 
