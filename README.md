@@ -133,6 +133,11 @@ TELEGRAM_MODE=all                      # 'all' sends every message, 'final' only
 TRADINGAGENTS_LANGUAGE=en              # default response language
 ```
 
+If you only want to receive a single summary message via Telegram set
+`TELEGRAM_MODE=final`. Ensure the `.env` file is located in the project root
+(or specify its path via `DOTENV_PATH`) and that the value contains no extra
+spaces.
+
 Set `TRADINGAGENTS_LANGUAGE` to your preferred language code (e.g. `de`) to
 receive all agent responses in that language.
 
