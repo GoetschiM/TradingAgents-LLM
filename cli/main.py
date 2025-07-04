@@ -38,12 +38,13 @@ app = typer.Typer(
 
 # Create a deque to store recent messages with a maximum length
 class MessageBuffer:
-    def __init__(self, max_length=100, telegram_enabled: bool = False):
+    def __init__(self, max_length=100, telegram_enabled: bool = False, telegram_mode: str = "all"):
         self.messages = deque(maxlen=max_length)
         self.tool_calls = deque(maxlen=max_length)
         self.current_report = None
         self.final_report = None  # Store the complete final report
         self.telegram_enabled = telegram_enabled
+        self.telegram_mode = telegram_mode  # 'all' or 'final'
         self.agent_status = {
             # Analyst Team
             "Market Analyst": "pending",
@@ -77,13 +78,13 @@ class MessageBuffer:
     def add_message(self, message_type, content):
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
         self.messages.append((timestamp, message_type, content))
-        if self.telegram_enabled:
+        if self.telegram_enabled and self.telegram_mode == "all":
             send_telegram_message(f"[{message_type}] {content}")
 
     def add_tool_call(self, tool_name, args):
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
         self.tool_calls.append((timestamp, tool_name, args))
-        if self.telegram_enabled:
+        if self.telegram_enabled and self.telegram_mode == "all":
             send_telegram_message(f"[Tool] {tool_name}: {args}")
 
     def update_agent_status(self, agent, status):
@@ -751,8 +752,9 @@ def run_analysis(llm_profile: Optional[str] = None):
     config["backend_url"] = selections["backend_url"]
     config["llm_provider"] = selections["llm_provider"].lower()
 
-    # Update telegram setting for message buffer
+    # Update telegram settings for message buffer
     message_buffer.telegram_enabled = config.get("telegram_enabled", False)
+    message_buffer.telegram_mode = config.get("telegram_mode", "all")
 
     if llm_profile:
         profile_path = Path(__file__).resolve().parent.parent / "configs" / "llm_profiles.yaml"
@@ -1111,6 +1113,11 @@ def run_analysis(llm_profile: Optional[str] = None):
         display_complete_report(final_state)
 
         update_display(layout)
+
+        # Send final report to Telegram if enabled
+        if message_buffer.telegram_enabled and message_buffer.final_report:
+            if message_buffer.telegram_mode in ("final", "all"):
+                send_telegram_message(message_buffer.final_report)
 
 
 @app.command()

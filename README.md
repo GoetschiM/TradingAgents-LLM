@@ -129,6 +129,7 @@ TELEGRAM_BOT_TOKEN=your-telegram-token # optional, enables Telegram logging
 TELEGRAM_CHAT_ID=your-chat-id          # optional, chat to send logs to
 TRADINGAGENTS_RESULTS_DIR=./results    # where results will be stored
 TELEGRAM_ENABLED=false                 # set true to send Telegram updates
+TELEGRAM_MODE=all                      # 'all' sends every message, 'final' only the final report
 TRADINGAGENTS_LANGUAGE=en              # default response language
 ```
 

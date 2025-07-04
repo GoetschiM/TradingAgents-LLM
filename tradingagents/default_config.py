@@ -29,4 +29,7 @@ DEFAULT_CONFIG = {
     "telegram_enabled": os.getenv("TELEGRAM_ENABLED", "false").lower() == "true",
     "telegram_bot_token": os.getenv("TELEGRAM_BOT_TOKEN"),
     "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID"),
+    # telegram_mode can be 'all' or 'final'. 'all' sends every message,
+    # while 'final' sends only the complete report at the end.
+    "telegram_mode": os.getenv("TELEGRAM_MODE", "all"),
 }
