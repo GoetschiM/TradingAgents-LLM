@@ -129,7 +129,11 @@ TELEGRAM_BOT_TOKEN=your-telegram-token # optional, enables Telegram logging
 TELEGRAM_CHAT_ID=your-chat-id          # optional, chat to send logs to
 TRADINGAGENTS_RESULTS_DIR=./results    # where results will be stored
 TELEGRAM_ENABLED=false                 # set true to send Telegram updates
+TRADINGAGENTS_LANGUAGE=en              # default response language
 ```
+
+Set `TRADINGAGENTS_LANGUAGE` to your preferred language code (e.g. `de`) to
+receive all agent responses in that language.
 
 Alternatively you can export these variables in your shell before running the
 program.

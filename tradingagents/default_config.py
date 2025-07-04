@@ -18,6 +18,7 @@ DEFAULT_CONFIG = {
     "backend_url": "https://api.openai.com/v1",
     "llm_profile": "local_phi3",
     "fallback_to_cloud": False,
+    "language": os.getenv("TRADINGAGENTS_LANGUAGE", "en"),
     # Debate and discussion settings
     "max_debate_rounds": 1,
     "max_risk_discuss_rounds": 1,
