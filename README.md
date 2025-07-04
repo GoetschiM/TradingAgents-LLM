@@ -25,11 +25,13 @@
 
 ---
 
-# TradingAgents: Multi-Agents LLM Financial Trading Framework 
+# TradingAGENT LLM: Multi-Agents LLM Financial Trading Framework 
 
 > 🎉 **TradingAgents** officially released! We have received numerous inquiries about the work, and we would like to express our thanks for the enthusiasm in our community.
 >
 > So we decided to fully open-source the framework. Looking forward to building impactful projects with you!
+This repository builds on the original [TradingAgents](https://github.com/TauricResearch/TradingAgents) project from Tauric Research. Our fork retains compatibility while introducing our own experiments under the name **TradingAGENT LLM**.
+
 
 <div align="center">
 <a href="https://www.star-history.com/#TauricResearch/TradingAgents&Date">
@@ -46,8 +48,12 @@
 🚀 [TradingAgents](#tradingagents-framework) | ⚡ [Installation & CLI](#installation-and-cli) | 🎬 [Demo](https://www.youtube.com/watch?v=90gr5lwjIho) | 📦 [Package Usage](#tradingagents-package) | 🤝 [Contributing](#contributing) | 📄 [Citation](#citation)
 
 </div>
+## Our Vision and Changes
 
-## TradingAgents Framework
+TradingAGENT LLM extends the original project with streamlined configuration options, additional agent roles and improved data connectors. We maintain compatibility with the upstream repository while exploring new ideas.
+
+
+## TradingAGENT LLM Framework
 
 TradingAgents is a multi-agent trading framework that mirrors the dynamics of real-world trading firms. By deploying specialized LLM-powered agents: from fundamental analysts, sentiment experts, and technical analysts, to trader, risk management team, the platform collaboratively evaluates market conditions and informs trading decisions. Moreover, these agents engage in dynamic discussions to pinpoint the optimal strategy.
 
@@ -146,7 +152,7 @@ An interface will appear showing results as they load, letting you track the age
   <img src="assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
 </p>
 
-## TradingAgents Package
+## TradingAGENT LLM Package
 
 ### Implementation Details
 
