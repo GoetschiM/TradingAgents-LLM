@@ -129,7 +129,7 @@ class MessageBuffer:
     def _update_final_report(self):
         report_parts = []
 
-        # Analyst Team Reports
+        # Analyst Team Reports (summarized)
         if any(
             self.report_sections[section]
             for section in [
@@ -142,35 +142,41 @@ class MessageBuffer:
             report_parts.append("## Analyst Team Reports")
             if self.report_sections["market_report"]:
                 report_parts.append(
-                    f"### Market Analysis\n{self.report_sections['market_report']}"
+                    f"### Market Analysis\n{short_summary(self.report_sections['market_report'])}"
                 )
             if self.report_sections["sentiment_report"]:
                 report_parts.append(
-                    f"### Social Sentiment\n{self.report_sections['sentiment_report']}"
+                    f"### Social Sentiment\n{short_summary(self.report_sections['sentiment_report'])}"
                 )
             if self.report_sections["news_report"]:
                 report_parts.append(
-                    f"### News Analysis\n{self.report_sections['news_report']}"
+                    f"### News Analysis\n{short_summary(self.report_sections['news_report'])}"
                 )
             if self.report_sections["fundamentals_report"]:
                 report_parts.append(
-                    f"### Fundamentals Analysis\n{self.report_sections['fundamentals_report']}"
+                    f"### Fundamentals Analysis\n{short_summary(self.report_sections['fundamentals_report'])}"
                 )
 
-        # Research Team Reports
+        # Research Team Reports (summarized)
         if self.report_sections["investment_plan"]:
             report_parts.append("## Research Team Decision")
-            report_parts.append(f"{self.report_sections['investment_plan']}")
+            report_parts.append(
+                f"{short_summary(self.report_sections['investment_plan'])}"
+            )
 
-        # Trading Team Reports
+        # Trading Team Reports (summarized)
         if self.report_sections["trader_investment_plan"]:
             report_parts.append("## Trading Team Plan")
-            report_parts.append(f"{self.report_sections['trader_investment_plan']}")
+            report_parts.append(
+                f"{short_summary(self.report_sections['trader_investment_plan'])}"
+            )
 
-        # Portfolio Management Decision
+        # Portfolio Management Decision (summarized)
         if self.report_sections["final_trade_decision"]:
             report_parts.append("## Portfolio Management Decision")
-            report_parts.append(f"{self.report_sections['final_trade_decision']}")
+            report_parts.append(
+                f"{short_summary(self.report_sections['final_trade_decision'])}"
+            )
 
         self.final_report = "\n\n".join(report_parts) if report_parts else None
 
@@ -749,6 +755,18 @@ def short_summary(text: str, max_sentences: int = 2) -> str:
     summary = " ".join(sentences[:max_sentences]).strip()
     return summary
 
+
+def german_signal(decision: str, asset: str) -> str:
+    """Convert English decision to a German trading signal phrase."""
+    mapping = {
+        "BUY": "ICH KAUFE",
+        "SELL": "ICH VERKAUFE",
+        "HOLD": "ICH HALTE",
+        "CLOSE": "ICH SCHLIESSE",
+    }
+    action = mapping.get(decision.upper(), decision)
+    return f"{action} {asset.upper()}"
+
 def run_analysis(llm_profile: Optional[str] = None):
     # First get all user selections
     selections = get_user_selections()
@@ -1107,12 +1125,13 @@ def run_analysis(llm_profile: Optional[str] = None):
         decision = graph.process_signal(final_state["final_trade_decision"])
 
         # Create a concise trading signal and short summary
-        signal_message = f"Trading Signal: {decision}"
         summary_text = short_summary(final_state["final_trade_decision"])
+        signal_message = german_signal(decision, selections["ticker"])
 
         # Record the signal
         message_buffer.add_message("Signal", signal_message)
         if message_buffer.telegram_enabled and message_buffer.telegram_mode == "final":
+            send_telegram_message(summary_text)
             send_telegram_message(signal_message)
 
         # Update all agent statuses to completed
