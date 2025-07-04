@@ -72,7 +72,8 @@ Volume-Based Indicators:
         prompt = prompt.partial(current_date=current_date)
         prompt = prompt.partial(ticker=ticker)
 
-        chain = prompt | llm.bind_tools(tools)
+        bound_llm = llm.bind_tools(tools)
+        chain = prompt | (lambda messages, llm=bound_llm: llm.invoke(messages))
 
         result = chain.invoke(state["messages"])
 
@@ -80,7 +81,7 @@ Volume-Based Indicators:
 
         if len(result.tool_calls) == 0:
             report = result.content
-       
+
         return {
             "messages": [result],
             "market_report": report,
