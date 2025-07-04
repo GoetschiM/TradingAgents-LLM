@@ -104,19 +104,18 @@ Our framework decomposes complex trading tasks into specialized roles. This ensu
 Clone TradingAgents:
 ```bash
 git clone https://github.com/GoetschiM/TradingAgents-LLM.git
-cd TradingAgents
+cd TradingAgents-LLM
 ```
 
-Create a virtual environment in any of your favorite environment managers:
+Create a Python virtual environment (Python 3.10 or later):
 ```bash
-conda create -n tradingagents python=3.13
-conda activate tradingagents
-```
-
-Install dependencies:
-```bash
+python3 -m venv .venv
+source .venv/bin/activate    # On Windows use `.venv\Scripts\activate`
 pip install -r requirements.txt
 ```
+
+Copy `.env.example` to `.env` and provide your API keys. This file also allows
+you to enable optional Telegram logging of the CLI output.
 
 ### Required APIs
 
