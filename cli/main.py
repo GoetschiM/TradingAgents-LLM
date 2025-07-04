@@ -2,6 +2,7 @@ from typing import Optional
 import datetime
 import typer
 from pathlib import Path
+import yaml
 from functools import wraps
 from rich.console import Console
 from rich.panel import Panel
@@ -731,7 +732,7 @@ def extract_content_string(content):
     else:
         return str(content)
 
-def run_analysis():
+def run_analysis(llm_profile: Optional[str] = None):
     # First get all user selections
     selections = get_user_selections()
 
@@ -743,6 +744,13 @@ def run_analysis():
     config["deep_think_llm"] = selections["deep_thinker"]
     config["backend_url"] = selections["backend_url"]
     config["llm_provider"] = selections["llm_provider"].lower()
+
+    if llm_profile:
+        profile_path = Path(__file__).resolve().parent.parent / "configs" / "llm_profiles.yaml"
+        profiles = yaml.safe_load(profile_path.read_text())
+        if llm_profile in profiles:
+            config.update(profiles[llm_profile])
+            config["llm_profile"] = llm_profile
 
     # Initialize the graph
     graph = TradingAgentsGraph(
@@ -1097,8 +1105,8 @@ def run_analysis():
 
 
 @app.command()
-def analyze():
-    run_analysis()
+def analyze(llm_profile: Optional[str] = typer.Option(None, "--llm-profile", help="Override LLM profile")):
+    run_analysis(llm_profile)
 
 
 if __name__ == "__main__":
