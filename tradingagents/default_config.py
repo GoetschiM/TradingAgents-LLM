@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DEFAULT_CONFIG = {
     "project_dir": os.path.abspath(os.path.join(os.path.dirname(__file__), ".")),
@@ -21,4 +24,8 @@ DEFAULT_CONFIG = {
     "max_recur_limit": 100,
     # Tool settings
     "online_tools": True,
+    # Telegram settings
+    "telegram_enabled": os.getenv("TELEGRAM_ENABLED", "false").lower() == "true",
+    "telegram_bot_token": os.getenv("TELEGRAM_BOT_TOKEN"),
+    "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID"),
 }

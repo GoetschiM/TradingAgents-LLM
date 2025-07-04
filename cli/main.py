@@ -25,6 +25,7 @@ from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.default_config import DEFAULT_CONFIG
 from cli.models import AnalystType
 from cli.utils import *
+from tradingagents.telegram_utils import send_telegram_message
 
 console = Console()
 
@@ -37,11 +38,12 @@ app = typer.Typer(
 
 # Create a deque to store recent messages with a maximum length
 class MessageBuffer:
-    def __init__(self, max_length=100):
+    def __init__(self, max_length=100, telegram_enabled: bool = False):
         self.messages = deque(maxlen=max_length)
         self.tool_calls = deque(maxlen=max_length)
         self.current_report = None
         self.final_report = None  # Store the complete final report
+        self.telegram_enabled = telegram_enabled
         self.agent_status = {
             # Analyst Team
             "Market Analyst": "pending",
@@ -75,10 +77,14 @@ class MessageBuffer:
     def add_message(self, message_type, content):
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
         self.messages.append((timestamp, message_type, content))
+        if self.telegram_enabled:
+            send_telegram_message(f"[{message_type}] {content}")
 
     def add_tool_call(self, tool_name, args):
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
         self.tool_calls.append((timestamp, tool_name, args))
+        if self.telegram_enabled:
+            send_telegram_message(f"[Tool] {tool_name}: {args}")
 
     def update_agent_status(self, agent, status):
         if agent in self.agent_status:
@@ -744,6 +750,9 @@ def run_analysis(llm_profile: Optional[str] = None):
     config["deep_think_llm"] = selections["deep_thinker"]
     config["backend_url"] = selections["backend_url"]
     config["llm_provider"] = selections["llm_provider"].lower()
+
+    # Update telegram setting for message buffer
+    message_buffer.telegram_enabled = config.get("telegram_enabled", False)
 
     if llm_profile:
         profile_path = Path(__file__).resolve().parent.parent / "configs" / "llm_profiles.yaml"
