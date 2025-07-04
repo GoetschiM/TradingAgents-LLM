@@ -783,6 +783,10 @@ def run_analysis(llm_profile: Optional[str] = None):
     # Update telegram settings for message buffer
     message_buffer.telegram_enabled = config.get("telegram_enabled", False)
     message_buffer.telegram_mode = config.get("telegram_mode", "all")
+    message_buffer.add_message(
+        "System",
+        f"Telegram enabled: {message_buffer.telegram_enabled}, mode: {message_buffer.telegram_mode}",
+    )
 
     if llm_profile:
         profile_path = Path(__file__).resolve().parent.parent / "configs" / "llm_profiles.yaml"
