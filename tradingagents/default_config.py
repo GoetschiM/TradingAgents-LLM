@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load environment variables from the project root .env file
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 DEFAULT_CONFIG = {
     "project_dir": os.path.abspath(os.path.join(os.path.dirname(__file__), ".")),
@@ -31,5 +33,5 @@ DEFAULT_CONFIG = {
     "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID"),
     # telegram_mode can be 'all' or 'final'. 'all' sends every message,
     # while 'final' sends only the complete report at the end.
-    "telegram_mode": os.getenv("TELEGRAM_MODE", "all"),
+    "telegram_mode": os.getenv("TELEGRAM_MODE", "all").strip().lower(),
 }
