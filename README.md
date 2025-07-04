@@ -114,8 +114,25 @@ source .venv/bin/activate    # On Windows use `.venv\Scripts\activate`
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and provide your API keys. This file also allows
-you to enable optional Telegram logging of the CLI output.
+Copy `.env.example` to `.env` and fill in your API keys.
+This file also allows you to enable optional Telegram logging of the CLI output.
+
+### Environment Variables
+
+Edit your `.env` file and provide the credentials used by the framework:
+
+```
+OPENAI_API_KEY=your-openai-key
+FINNHUB_API_KEY=your-finnhub-key       # required for financial data
+GOOGLE_API_KEY=your-google-key         # optional, used with the Gemini backend
+TELEGRAM_BOT_TOKEN=your-telegram-token # optional, enables Telegram logging
+TELEGRAM_CHAT_ID=your-chat-id          # optional, chat to send logs to
+TRADINGAGENTS_RESULTS_DIR=./results    # where results will be stored
+TELEGRAM_ENABLED=false                 # set true to send Telegram updates
+```
+
+Alternatively you can export these variables in your shell before running the
+program.
 
 ### Local LLM with Ollama
 
@@ -147,14 +164,10 @@ Leave this running in a separate terminal so the framework can connect to
 
 ### Required APIs
 
-You will also need the FinnHub API for financial data. All of our code is implemented with the free tier.
+If you prefer to export the keys manually instead of using a `.env` file, set them before running the program:
 ```bash
-export FINNHUB_API_KEY=$YOUR_FINNHUB_API_KEY
-```
-
-You will need the OpenAI API for all the agents.
-```bash
-export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
+export FINNHUB_API_KEY=$YOUR_FINNHUB_API_KEY  # financial data
+export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY    # language models
 ```
 
 ### CLI Usage
