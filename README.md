@@ -117,6 +117,25 @@ pip install -r requirements.txt
 Copy `.env.example` to `.env` and provide your API keys. This file also allows
 you to enable optional Telegram logging of the CLI output.
 
+### Local LLM with Ollama
+
+The default configuration uses a local Ollama server with the `phi3:mini-q4_K_M`
+model. Install [Ollama](https://ollama.com/) separately and download the model:
+
+```bash
+ollama pull phi3:mini-q4_K_M
+```
+
+You can start the server manually with `ollama serve` or run the helper script
+below which downloads the model if necessary and launches the server:
+
+```bash
+bash scripts/start_phi3_ollama.sh
+```
+
+Leave this running in a separate terminal so the framework can connect to
+`http://localhost:11434/v1`.
+
 ### Required APIs
 
 You will also need the FinnHub API for financial data. All of our code is implemented with the free tier.
