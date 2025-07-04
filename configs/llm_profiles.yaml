@@ -1,0 +1,10 @@
+local_phi3:
+  llm_provider: "ollama"
+  backend_url: "http://localhost:11434/v1"
+  deep_think_llm: "phi3:mini-q4_K_M"
+  quick_think_llm: "phi3:mini-q4_K_M"
+cloud_gemini_flash:
+  llm_provider: "gemini"
+  backend_url: "https://generativelanguage.googleapis.com/v1beta"
+  deep_think_llm: "gemini-1.5-flash-l"
+  quick_think_llm: "gemini-1.5-flash-l"
